@@ -4,7 +4,7 @@
 #include <iostream>
 
 void ExtractZipWithWindows(const std::string& zipPath, const std::string& outputFolder) {
-    std::string parameters = "-Command \"Expand-Archive -Path '" + zipPath + "' -DestinationPath '" + outputFolder + "' -Force\"";
+    std::string parameters = "-Command \"Expand-Archive -LiteralPath \\\"" + zipPath + "\\\" -DestinationPath \\\"" + outputFolder + "\\\" -Force\"";
 
     SHELLEXECUTEINFOA sei = {0};
     sei.cbSize = sizeof(SHELLEXECUTEINFOA);
