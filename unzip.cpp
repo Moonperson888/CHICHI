@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib> 
 #include <string>
+#include <windows.h>
+#include <shellapi.h>
 
 void ExtractZipWithWindows(const std::string& zipPath, const std::string& outputFolder) {
     std::cout << "[+] ChiChi is telling Windows to extract " << zipPath << "...\n";
@@ -13,6 +15,8 @@ void ExtractZipWithWindows(const std::string& zipPath, const std::string& output
         std::cout << "[+] Successfully extracted to: " << outputFolder << "\n";
     } else {
         std::cerr << "[-] Error: Windows failed to extract the ZIP file.\n";
+        std::cout << "\nPress Enter to close..." << std::endl;
+        std::cin.get();
     }
 }
 
@@ -20,19 +24,25 @@ int main(int argc, char* argv[]) {
     std::string zipFile;
 
     if (argc > 1) {
+        zipFile = argv[1];
     } else {
         std::cout << "[-] No file dropped. Looking for default 'archive.zip'...\n";
         zipFile = "archive.zip";
     }
 
-    std::string outputFolder = zipFile + "_extracted";
+    std::string outputFolder = zipFile;
+    size_t lastDot = outputFolder.find_last_of(".");
+    if (lastDot != std::string::npos) {
+        outputFolder = outputFolder.substr(0, lastDot);
+    }
 
     ExtractZipWithWindows(zipFile, outputFolder);
 
-    std::cout << "\nClosing window in 4 seconds...\n";
-    std::string sleepCmd = "powershell -Command \"Start-Sleep -Seconds 4\"";
-    std::system(sleepCmd.c_str());
+    ShellExecuteA(NULL, "open", "explorer.exe", outputFolder.c_str(), NULL, SW_SHOW);
 
+    std::cout << "\nClosing window in 1 second...\n";
+    std::string sleepCmd = "powershell -Command \"Start-Sleep -Seconds 1\"";
+    std::system(sleepCmd.c_str());
+    
     return 0;
 }
-
