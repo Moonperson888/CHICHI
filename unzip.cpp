@@ -1,32 +1,33 @@
-#include <iostream>
-#include <cstdlib> 
-#include <string>
 #include <windows.h>
 #include <shellapi.h>
+#include <string>
+#include <iostream>
 
 void ExtractZipWithWindows(const std::string& zipPath, const std::string& outputFolder) {
-    std::cout << "[+] ChiChi is telling Windows to extract " << zipPath << "...\n";
+    std::string parameters = "-Command \"Expand-Archive -Path '" + zipPath + "' -DestinationPath '" + outputFolder + "' -Force\"";
 
-    std::string command = "powershell -Command \"Expand-Archive -Path '" + zipPath + "' -DestinationPath '" + outputFolder + "' -Force\"";
+    SHELLEXECUTEINFOA sei = {0};
+    sei.cbSize = sizeof(SHELLEXECUTEINFOA);
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+    sei.hwnd = NULL;
+    sei.lpVerb = "open";
+    sei.lpFile = "powershell.exe";        
+    sei.lpParameters = parameters.c_str(); 
+    sei.nShow = SW_HIDE;                  
 
-    int result = std::system(command.c_str());
-
-    if (result == 0) {
-        std::cout << "[+] Successfully extracted to: " << outputFolder << "\n";
-    } else {
-        std::cerr << "[-] Error: Windows failed to extract the ZIP file.\n";
-        std::cout << "\nPress Enter to close..." << std::endl;
-        std::cin.get();
+    if (ShellExecuteExA(&sei)) {
+        WaitForSingleObject(sei.hProcess, INFINITE);
+        CloseHandle(sei.hProcess);
     }
 }
 
-int main(int argc, char* argv[]) {
-    std::string zipFile;
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    std::string zipFile = lpCmdLine;
 
-    if (argc > 1) {
-        zipFile = argv[1];
-    } else {
-        std::cout << "[-] No file dropped. Looking for default 'archive.zip'...\n";
+    if (!zipFile.empty() && zipFile.front() == '"') zipFile.erase(0, 1);
+    if (!zipFile.empty() && zipFile.back() == '"') zipFile.pop_back();
+
+    if (zipFile.empty()) {
         zipFile = "archive.zip";
     }
 
@@ -40,9 +41,5 @@ int main(int argc, char* argv[]) {
 
     ShellExecuteA(NULL, "open", "explorer.exe", outputFolder.c_str(), NULL, SW_SHOW);
 
-    std::cout << "\nClosing window in 1 second...\n";
-    std::string sleepCmd = "powershell -Command \"Start-Sleep -Seconds 1\"";
-    std::system(sleepCmd.c_str());
-    
     return 0;
 }
