@@ -18,7 +18,7 @@ Lightweight, zero-external-dependency file extractor for Windows written in C++.
 ### How to Use
 1. Press `Win + R`, type `shell:sendto`, and press **Enter**.
 2. Hold **Right-Click** on `CHICHI.exe`, drag it into the `SendTo` folder, and click **Create shortcuts here** (you can rename the shortcut and change its icon to whatever you like).
-3. Right-click any supported archive file, click **Show more options** (on Windows 11) → **Send to** → select your **CHICHI** shortcut.
+3. Right-click any supported archive file, click **Show more options** → **Send to** → select your **CHICHI** shortcut.
 
 ### Build from Source
 ```bash
