@@ -1,5 +1,5 @@
 # CHICHI
-Lightweight, zero-dependency file extractor for Windows written in C++.
+Lightweight, zero-external-dependency file extractor for Windows written in C++.
 
 ### Supported Formats
 *(Non-password-protected archives)*
