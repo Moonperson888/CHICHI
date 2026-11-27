@@ -7,8 +7,8 @@ Lightweight, zero-external-dependency file extractor for Windows written in C++.
 * `.tar.gz` / `.tgz`
 * `.tar.xz` / `.txz`
 * `.tar`
-* `.7z`
-* `.rar`
+* `.7z` (With Windows 11 (23H2+))
+* `.rar` (With Windows 11 (23H2+))
 
 ### Features
 * Lightweight extraction
